@@ -1,12 +1,23 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 
 //database
 const pool = require("./db")
 
+//process.env.PORT
+const PORT = process.env.PORT || 5000;
+
 //middleware
 app.use(cors())
+//process.env.NODE_ENV => Production or undefined.
+if (process.env.NODE_ENV === "production"){
+    //server static content
+    // npm run build
+    app.use(express.static(path.join(__dirname, "client/build")));
+}
+
 
 // to get data from client server
 app.use(express.json()) // req.body
@@ -82,6 +93,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(5000, ()=>{
-    console.log("server has started on port 5000")
+app.listen(PORT, ()=>{
+    console.log(`server has started on port ${PORT}`)
 })
